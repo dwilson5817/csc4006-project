@@ -45,7 +45,6 @@ def traverse_from_current_commit() -> None:
 
         logging.info('Listing files in directory:')
         logging.info(' > ' + ', '.join(os.listdir(args.working_directory)))
-        logging.info('...done!')
 
     logging.info('')
     logging.info(_("Restoring original branch ({})").format(original_branch))
