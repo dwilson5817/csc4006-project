@@ -9,5 +9,19 @@ ascii_logo = """
                              \|_________|                                  
 """
 
-project_name = "GitSlice"
-project_description = "Slicing the repository that feeds us"
+project = {
+    "name": "GitSlice",
+    "description": "Slicing the repository that feeds us"
+}
+
+config_keys = {
+    "working_directory": "working_directory",
+    "repo": {
+        "type": "type",
+        "remote": "remote",
+        "local": "local",
+    },
+    "docker": {
+        "analysis_image": "analysis_image",
+    },
+}
