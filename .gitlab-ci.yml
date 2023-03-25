@@ -1,10 +1,25 @@
+include:
+- template: Security/SAST.gitlab-ci.yml
+
 stages:
 - build
 - test
+
+variables:
+  DOCKER_DIR: docker
+
 sast:
   stage: test
-include:
-- template: Security/SAST.gitlab-ci.yml
+
+build-python:
+  extends: .docker-build
+  variables:
+    CONTAINER_NAME: python
+
+build-cloc:
+  extends: .docker-build
+  variables:
+    CONTAINER_NAME: cloc
 
 .docker-build:
   image: docker:latest
@@ -22,19 +37,9 @@ include:
       tag=":$CI_COMMIT_REF_SLUG"
       echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
     fi
-  - docker build --pull -t "$CI_REGISTRY_IMAGE/$CONTAINER_NAME${tag}" "docker/$CONTAINER_NAME/Dockerfile"
+  - docker build --pull -t "$CI_REGISTRY_IMAGE/$CONTAINER_NAME${tag}" "$DOCKER_DIR/$CONTAINER_NAME"
   - docker push "$CI_REGISTRY_IMAGE/$CONTAINER_NAME${tag}"
   rules:
   - if: $CI_COMMIT_BRANCH
     exists:
-    - docker/$CONTAINER_NAME/Dockerfile
-
-build-python:
-  extends: .docker-build
-  variables:
-    CONTAINER_NAME: python
-
-build-cloc:
-  extends: .docker-build
-  variables:
-    CONTAINER_NAME: cloc
+    - $DOCKER_DIR/$CONTAINER_NAME/Dockerfile
