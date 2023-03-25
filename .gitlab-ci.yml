@@ -22,21 +22,19 @@ include:
       tag=":$CI_COMMIT_REF_SLUG"
       echo "Running on branch '$CI_COMMIT_BRANCH': tag = $tag"
     fi
-  - docker build --pull -t "$CI_REGISTRY_IMAGE/$CONTAINER_NAME${tag}" "$BUILD_PATH"
+  - docker build --pull -t "$CI_REGISTRY_IMAGE/$CONTAINER_NAME${tag}" "docker/$CONTAINER_NAME/Dockerfile"
   - docker push "$CI_REGISTRY_IMAGE/$CONTAINER_NAME${tag}"
   rules:
   - if: $CI_COMMIT_BRANCH
     exists:
-    - $BUILD_PATH/Dockerfile
+    - docker/$CONTAINER_NAME/Dockerfile
 
 build-python:
   extends: .docker-build
   variables:
-    BUILD_PATH: docker/python/
     CONTAINER_NAME: python
 
 build-cloc:
   extends: .docker-build
   variables:
-    BUILD_PATH: docker/cloc/
     CONTAINER_NAME: cloc
