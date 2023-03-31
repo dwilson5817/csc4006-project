@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="92f1ea3b-2937-4020-80f3-f48604c321a0" name="Kelvin">
+        <fileTransfer rootFolder="/users/40234266/csc4006-project" accessType="SFTP" host="login.kelvin.alces.network" port="55890" sshConfigId="45c425d9-1ab2-42f5-9276-d6dd16efe7ce" sshConfig="40234266@login.kelvin.alces.network:55890 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
