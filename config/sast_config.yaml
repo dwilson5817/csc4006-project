@@ -1,0 +1,32 @@
+# Directory used for files created during execution.  This directory isn't used for any output and anything created will
+# be deleted before the program exits.
+Temp Directory: /tmp/users/40234266/csc4006-project/
+# When enabled, the container will first rsync the files to the temporary directory before analysis so the analysis
+# program can create and modify files during its execution.  These are deleted at the end.  This injects an rsync
+# command before the analysis command (and an rm command after the analysis command).
+# !! This requires rsync to be installed in the analysis container!
+Rsync To Temp: true
+
+# Output logs from each run of the program will be stored in this directory.
+Output Directory: /users/40234266/csc4006-project/output/sast/numpy/
+# Files will be output to the Output Directory in the format below, with .txt appended (including .txt here will cause
+# the output file to end in .txt.txt).
+# Available placeholders: %COMMIT_ID% and %COMMIT_TIME%
+Output Format: '%COMMIT_TIME%_%COMMIT_ID%'
+
+# Repository type, valid options: Remote, Local.  Not case sensitive.
+Git Repository Type: Remote
+# Location of the repository, local filesystem when repository type is local and a URL when repository type is remote.
+Git Repository Source: https://github.com/numpy/numpy.git
+# Git Repository Source: /users/40234266/csc4006-project-testing/repo/
+
+Analysis Image: returntocorp/semgrep
+Analysis Command: 'semgrep scan --config auto /src 2>&1'
+
+Repo Directory Name: repo
+Mount Directory Name: mount
+
+# Maximum amount of commits to analyse starting at the latest commit.
+Commit Limit: 15000
+# Total amount of commits to skip before next analysis, i.e. 5 will send every 5th commit for analysis.
+Commit Skip: 250
