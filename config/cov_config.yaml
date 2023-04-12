@@ -20,7 +20,7 @@ Git Repository Type: Remote
 Git Repository Source: https://github.com/pallets/flask.git
 # Git Repository Source: /users/40234266/csc4006-project-testing/repo/
 
-Analysis Image: gitlab.dylanwilson.dev:5050/qub/csc4006-project/python:latest
+Analysis Image: docker://gitlab.dylanwilson.dev:5050/qub/csc4006-project/python:latest
 Analysis Command: 'python3 -m venv venv 2>&1 ; . venv/bin/activate 2>&1 ; python -m pip install --upgrade pip setuptools coverage 2>&1 ; pip install -r requirements/dev.txt 2>&1 ; pip install -e . 2>&1 ; coverage run -m pytest 2>&1 ; coverage report 2>&1'
 
 Repo Directory Name: repo

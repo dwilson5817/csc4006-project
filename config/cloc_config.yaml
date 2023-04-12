@@ -20,7 +20,7 @@ Git Repository Type: Remote
 Git Repository Source: https://github.com/AlDanial/cloc.git
 # Git Repository Source: /users/40234266/csc4006-project-testing/repo/
 
-Analysis Image: gitlab.dylanwilson.dev:5050/qub/csc4006-project/cloc:latest
+Analysis Image: docker://gitlab.dylanwilson.dev:5050/qub/csc4006-project/cloc:latest
 Analysis Command: 'cloc .'
 
 Repo Directory Name: repo

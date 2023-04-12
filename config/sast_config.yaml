@@ -20,7 +20,7 @@ Git Repository Type: Remote
 Git Repository Source: https://github.com/numpy/numpy.git
 # Git Repository Source: /users/40234266/csc4006-project-testing/repo/
 
-Analysis Image: returntocorp/semgrep
+Analysis Image: docker://returntocorp/semgrep
 Analysis Command: 'semgrep scan --config auto /src 2>&1'
 
 Repo Directory Name: repo
