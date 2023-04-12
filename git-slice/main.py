@@ -2,6 +2,7 @@ import argparse
 import logging
 import sys
 
+import coloredlogs as coloredlogs
 import git
 import pyfiglet
 import torcpy
@@ -102,19 +103,11 @@ def run_analysis_singularity(commit) -> str:
 def main():
     global config
 
-    parser = argparse.ArgumentParser(description="{} - {}".format(PROJECT_NAME, PROJECT_DESCRIPTION), formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-
-    parser.add_argument("-c", "--config-file", help="configuration file", required=True)
-    parser.add_argument("-l", "--log-level", help="logging level, lowering this value will increase verbosity", type=int, default=20)
-
-    # Ignore first argument from parsing as this will be the filename
-    args = parser.parse_args(sys.argv[1:])
-
+    logging.info(f"{PROJECT_NAME} - {PROJECT_DESCRIPTION}")
+    logging.info(f"Starting on {socket.gethostname()}")
     runtime_info(args)
 
     config = Config(args.config_file)
-    logging.basicConfig(format='{} %(levelname)s \u00BB %(message)s'.format(config.get_instance_id()), level=args.log_level)
-
     filesystem_manager = FilesystemManager(config)
 
     try:
@@ -134,4 +127,16 @@ def main():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="{} - {}".format(PROJECT_NAME, PROJECT_DESCRIPTION),
+                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+
+    parser.add_argument("-c", "--config-file", help="configuration file location", required=True)
+    parser.add_argument("-d", "--dry-run", help="enables dry run mode", action='store_true')
+    parser.add_argument("-l", "--log-level", help="logging level, where 0 is the most verbose", type=int, default=20)
+
+    # Ignore first argument from parsing as this will be the filename
+    args = parser.parse_args(sys.argv[1:])
+
+    coloredlogs.install(level=args.log_level)
+
     main()
