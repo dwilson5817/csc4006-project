@@ -3,10 +3,30 @@ include:
 
 stages:
 - build
+- lint
 - test
+- deploy
 
 variables:
   DOCKER_DIR: docker
+
+flake8:
+  image: python:3.10
+  stage: lint
+  script:
+    - pip install flake8
+    - flake8 git-slice/
+  only:
+    - merge_requests
+
+unittest:
+  image: python:3.10
+  stage: test
+  script:
+    - pip install -r test_requirements.txt
+    - python -m unittest discover -s git-slice/ -t git-slice/
+  rules:
+    - when: always
 
 sast:
   stage: test
@@ -43,3 +63,15 @@ build-cloc:
   - if: $CI_COMMIT_BRANCH
     exists:
     - $DOCKER_DIR/$CONTAINER_NAME/Dockerfile
+
+pages:
+  stage: deploy
+  script:
+  - pip install -r requirements.txt -r dev_requirements.txt
+  - cd docs/
+  - sphinx-build -b html . public
+  artifacts:
+    paths:
+    - docs/public
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH

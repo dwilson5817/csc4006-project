@@ -9,7 +9,6 @@ from datetime import timedelta
 
 import coloredlogs as coloredlogs
 import git
-import torcpy
 from git import Repo
 
 from config import AdditionalFilters, Config, ChangesCategories
@@ -219,7 +218,7 @@ def get_analysis_list(repo, config_dict):
             continue
 
         files_changed, additions, deletions = [int(num) for num in
-                                               re.findall('(\d+)', repo.git.diff(commit, shortstat=True))]
+                                               re.findall(r'(\d+)', repo.git.diff(commit, shortstat=True))]
 
         logging.debug("Commit %s changed %i files, with %i additions and %i deletions", commit.hexsha, files_changed,
                       additions, deletions)
@@ -352,8 +351,6 @@ def run_analysis_singularity(analysis) -> str:
 
     start_time = time.time()
 
-    from spython.main import Client
-
     commit_id, commit_time, analysis_command, analysis_image = analysis.get_details()
 
     logging.info('Beginning analysis on %s', commit_id)
@@ -441,5 +438,9 @@ if __name__ == '__main__':
     args = parser.parse_args(sys.argv[1:])
 
     coloredlogs.install(level=args.log_level)
+
+    if not args.dry_run:
+        import torcpy
+        from spython.main import Client
 
     main()
