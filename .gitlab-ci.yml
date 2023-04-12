@@ -65,6 +65,7 @@ build-cloc:
     - $DOCKER_DIR/$CONTAINER_NAME/Dockerfile
 
 pages:
+  image: python:3.10
   stage: deploy
   script:
   - pip install -r requirements.txt -r dev_requirements.txt
