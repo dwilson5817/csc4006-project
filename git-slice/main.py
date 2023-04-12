@@ -71,7 +71,7 @@ def run_analysis_singularity(commit) -> str:
     logging.debug('Expecting that %s contains the commit files', commit_dir)
 
     logging.debug('Loading %s...', config.get_analysis_image())
-    Client.load('docker://{}'.format(config.get_analysis_image()))
+    Client.load('{}'.format(config.get_analysis_image()))
 
     if config.get_rsync_to_temp():
         analysis_command = f"{PRE_RUN.replace('%%WORKING_DIR%%', f'/tmp/{commit_id}')} ; {config.get_analysis_command()} ; {POST_RUN.replace('%%WORKING_DIR%%', f'/tmp/{commit_id}')}"
