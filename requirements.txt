@@ -1,3 +1,6 @@
-docker_py==1.10.6
-GitPython==3.1.29
+GitPython==3.1.31
 PyYAML==6.0
+torcpy==0.1.1
+spython~=0.3.0
+coloredlogs~=15.0.1
+uuid~=1.30
