@@ -33,6 +33,7 @@ def runtime_info(args) -> None:
     logging.info(f'  Python version: \t%s', sys.version)
     logging.info(f'  GitPython version: \t%s', git.__version__)
     logging.info(f'  Config file: \t%s', args.config_file)
+    logging.info(f'  Dry run mode: \t\t%s', args.dry_run)
     logging.info(f'  Logging level: \t\t%s', args.log_level)
     logging.info('')
 
@@ -46,20 +47,23 @@ def traverse_from_current_commit() -> None:
 
     tasks = []
 
-    for (i, commit) in enumerate(repo.iter_commits()):
-        if i > config.get_commit_limit():
-            break
+    print(config.get_additional_filter(AdditionalFilters.LIMIT))
 
-        if i % config.get_commit_skip() == 0:
-            logging.debug('Submitting commit %s for analysis', str(commit))
-            task = torcpy.submit(run_analysis_singularity, (str(commit), str(commit.committed_date)))
-            tasks.append(task)
+    if not args.dry_run:
+        logging.debug('Submitting commit %s for analysis', str(analysis.get_commit_id()))
+        task = torcpy.submit(run_analysis_singularity, analysis)
+        tasks.append(task)
+    else:
+        logging.info('Would have submitted commit %s for analysis', str(analysis.get_commit_id()))
+        logging.info('  Image: %s', str(analysis.get_analysis_image()))
+        logging.info('  Command: %s', str(analysis.get_analysis_command()))
 
-    logging.debug('All commits are submitted for analysis, waiting for them to complete...')
-    torcpy.wait()
+    if not args.dry_run:
+        logging.debug('All commits are submitted for analysis, waiting for them to complete...')
+        torcpy.wait()
 
-    for t in tasks:
-        logging.info(t.result())
+        for t in tasks:
+            logging.info(t.result())
 
 
 def run_analysis_singularity(commit) -> str:
