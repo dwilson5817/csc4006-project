@@ -1,32 +1,148 @@
-# Directory used for files created during execution.  This directory isn't used for any output and anything created will
-# be deleted before the program exits.
-Temp Directory: /tmp/users/40234266/csc4006-project/
-# When enabled, the container will first rsync the files to the temporary directory before analysis so the analysis
-# program can create and modify files during its execution.  These are deleted at the end.  This injects an rsync
-# command before the analysis command (and an rm command after the analysis command).
-# !! This requires rsync to be installed in the analysis container!
-Rsync To Temp: true
+# GitSlice - Slicing the repository that feeds us.
+#
+# This is the configuration file for GitSlice.  Some options are required, some are optional.  If you don't need an
+# option you can disable it by commenting out that line.
 
-# Output logs from each run of the program will be stored in this directory.
-Output Directory: /users/40234266/csc4006-project/output/cloc/cloc/
-# Files will be output to the Output Directory in the format below, with .txt appended (including .txt here will cause
-# the output file to end in .txt.txt).
-# Available placeholders: %COMMIT_ID% and %COMMIT_TIME%
+# ====
+# Output options.
+# The following options are used to specify where the output of the analysis should be saved, and the format of the file
+# name.
+# ====
+
+# Required.  Output logs from each run of the program will be stored in this directory.
+Output Directory: /tmp/users/40234266/csc4006-project/
+
+# Required.  Files will be output to the Output Directory in the format below, with .txt appended (including .txt here
+# will cause the output file to end in .txt.txt).  Available placeholders: %COMMIT_ID% and %COMMIT_TIME%
 Output Format: '%COMMIT_TIME%_%COMMIT_ID%'
 
-# Repository type, valid options: Remote, Local.  Not case sensitive.
-Git Repository Type: Remote
-# Location of the repository, local filesystem when repository type is local and a URL when repository type is remote.
-Git Repository Source: https://github.com/AlDanial/cloc.git
-# Git Repository Source: /users/40234266/csc4006-project-testing/repo/
+# ====
+# Temporary directory options.
+# The following options are used to specify where the temporary directory should be created, it's contents and if files
+# from the repository should be copied to the temporary directory so the analysis image can
+# ====
 
-Analysis Image: docker://gitlab.dylanwilson.dev:5050/qub/csc4006-project/cloc:latest
-Analysis Command: 'cloc .'
+# Required.  Directory used for files created during execution.  This directory isn't used for any output and anything
+# created will be deleted before the program exits.
+Temp Directory: /users/40234266/csc4006-project/output/cloc/cloc/
 
+# Required.  When enabled, the container will first rsync the files to the temporary directory before analysis so the
+# analysis program can create and modify files during its execution.  These are deleted at the end.  This injects an
+# rsync command before the analysis command (and an rm command after the analysis command).
+# IMPORTANT: This requires rsync to be installed in the analysis container!
+Rsync To Temp: true
+
+# Required.  The following options give the names of directories which will be created temporarily by GitSlice.  They
+# will be created inside the directory given by the "Temp Directory" option.  This directory is deleted at the end of
+# execution.
 Repo Directory Name: repo
 Mount Directory Name: mount
 
-# Maximum amount of commits to analyse starting at the latest commit.
-Commit Limit: 5000
-# Total amount of commits to skip before next analysis, i.e. 5 will send every 5th commit for analysis.
-Commit Skip: 1
+# ====
+# Git repository options.
+# The following options are used to configure the Git repository which will be used for analysis.
+# ====
+
+# Required.  Repository type, valid options: Remote, Local.  Not case sensitive.
+Git Repository Type: Remote
+# Required.  Location of the repository, local filesystem when repository type is local and a URL when repository type
+# is remote.
+Git Repository Source: https://github.com/AlDanial/cloc.git
+# Git Repository Source: /users/40234266/csc4006-project-testing/repo/
+
+# ====
+# Analysis options.
+# The following options are used to configure the singularity containers and commands which will be used for analysis.
+# ====
+
+# Required.  GitSlice supports configuration of multiple containers and commands depending on the version.  This section
+# contains a list of commits, when the commit ID exists in the history of the commit being analysed, the image and
+# command given will be used.  Where multiple commits exist in the history, the latest commit in the history will be
+# used.  This allows for older versions of the project to use older containers (i.e. previous language versions), or
+# different commands (i.e. if files exist at a different location).
+Analysis:
+#  56a676c8058c3bcc213aae3d0cae318aef75ed25:
+#    Image: 'Image ONE'
+#    Command: 'Command ONE'
+#  c45a101f4ef02a20f63cb39dee04c0577ad7b099:
+#    Image: 'Image TWO'
+#    Command: 'Command TWO'
+
+  # If none of the commits above exist in the tree, then the Default stanza is used - in theory this isn't required if
+  # you absolutely know that all commits contain at least one of the above but an error will be thrown if this isn't the
+  # case.  If you get KeyError: 'Default' then this is what has happened.
+  Default:
+    Image: docker://gitlab.dylanwilson.dev:5050/qub/csc4006-project/cloc:latest
+    Command: 'cloc .'
+
+# Required.  Branch, tag or commit to begin working backwards from.
+Starting Point: master
+
+# # Optional.  Branch, tag or commit to stop at.
+# Stopping Point: 9a46c3c4fde7eab96b4519ed595b1eb24bdb5d66
+
+# ====
+# Commit filter options.
+# The following options are used to filter the commits which will be analysed.
+# ====
+
+# The "Git Rev List Args" stanza is required but can be empty.  The following options will be passed to the
+# "git rev-list" command to limit the commits which will be considered for analysis.  Do note this is not an exhaustive
+# list and many options are available, a couple of examples are provided.  Consult the man pages for all the possible
+# options here!  "max-count: 1000" produces "--max-count=1000", and "no-merges: True" produces "--no-merges".
+Git Rev List Args:
+
+#  # Only look at the last X commits.  Note: this isn't the amount of commits which will be actually analysed, but
+#  # rather the last 1,000 commits will be considered.  To limit the total amount of commits which will be analysed, see
+#  # the Limit options under Additional Filters.
+#  max-count: 1000
+
+#  # Only include commits by authors which match at least one of the following regular expressions.
+#  author:
+#    - '*@gmail.com'
+#    - '*@yahoo.com'
+
+#  # Only consider commits which where committed before this date.  The date is given in ISO8601 format.
+#  before: 2023-04-05T19:12:46Z
+
+#  # Ignore merge commits, another option, "merges" is also available and will only include merge commits.
+#  no-merges: True
+
+# The "Additional Filters" stanza is required by can be empty.  This section contains additional filter options provided
+# by GitSlice that are not available as arguments to "git rev-list".
+Additional Filters:
+
+  # Maximum amount of commits to analyse
+  # !! IMPORTANT: this is applied after all other additional filters, so consider this to be the upper limit on the
+  # amount of commits which will be analysed.  If you wish to set a limit on the amount of commits to be considered, you
+  # can add max-count to the Git Rev List Args stanza.
+  Limit: 5000
+
+#  # Total amount of commits to skip before next analysis, i.e. 2 will select 1, then skip 2 commits, then select 1.
+#  # !! IMPORTANT: this is applied after all other additional filters, so consider this to be the amount of commits which
+#  # otherwise would be included, to skip.
+#  Skip: 0
+
+#  Changes:
+
+#    # Comma-seperated list of ranges, allows ranges such as 1-4, or less-than and more-than expressions such as > 100
+#    # or < 200.  e.g. < 100, 150-175, > 200.  Only commits with total files changed within the following range will be
+#    # selected.
+#    Files: 5-100
+
+#    # Same formatting as above.  Only commits with additions/deletions within these ranges will be selected.  For
+#    # example, we may choose to select only commits with more than 100 additions, or less than 1,000 deletions.
+#    Additions: 0, > 100
+#    Deletions: < 100, 150-175, > 200
+
+#    # When enabled, only commits which change at least one file with the following files types will be included.  The
+#    # dot is optional, but do note not including it will result is something like filepy matching py whereas .py would
+#    # only match file.py.
+#    File Types:
+#      - py
+#      - java
+
+#  # Minimum difference in time between two commits
+#  # Format: XdXhXs
+#  # e.g. 3d5h19m is 3 days, 5 hours and 19 minutes.
+#  Min Delta: 1d
