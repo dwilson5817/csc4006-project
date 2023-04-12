@@ -44,8 +44,3 @@ INFO:root: > .git, A.txt
 INFO:root:
 INFO:root:Restoring original branch (main)
 ```
-
-## Docker in Docker
-
-When running on Kelvin we need to use Singularity to run Docker images.
-We use Docker in Docker to get a running version of Docker to enable us to grab the tarball we will use with singularity.
