@@ -221,7 +221,10 @@ def get_analysis_list(repo, config_dict):
 
         logging.debug("git-diff gave %s", diff)
 
-        files_changed, additions, deletions = [int(num) for num in re.findall(r'(\d+)', diff)]
+        if not diff:
+            files_changed = additions = deletions = 0
+        else:
+            files_changed, additions, deletions = [int(num) for num in re.findall(r'(\d+)', diff)]
 
         logging.debug("Commit %s changed %i files, with %i additions and %i deletions", commit.hexsha, files_changed,
                       additions, deletions)
