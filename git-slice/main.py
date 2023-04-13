@@ -39,7 +39,7 @@ class Analysis:
     and perform analysis on a commit.
     """
 
-    def __init__(self, commit_id, commit_time, analysis_image, analysis_command):
+    def __init__(self, commit_id, commit_time, analysis_image, analysis_command) -> None:
         self._commit_id = commit_id
         self._commit_time = commit_time
         self._analysis_image = analysis_image
@@ -71,11 +71,11 @@ class Analysis:
 
         return self._commit_id
 
-    def get_commit_time(self) -> str:
+    def get_commit_time(self) -> datetime:
         """
         Returns the time the commit was committed.  Importantly, this is the commit time, not the authored time!
 
-        :return: String of time the commit was committed in seconds since the UNIX epoch.
+        :return: datetime representation of the time the commit was committed in seconds since the UNIX epoch.
         """
 
         return self._commit_time
@@ -124,7 +124,7 @@ def parse_delta(delta) -> datetime:
         return timedelta(**parts)
 
 
-def get_analysis_details(commit, analysis_config):
+def get_analysis_details(commit, analysis_config) -> (str, str):
     """
     Given a commit object, and a configuration object, this method returns the analysis image and command which should
     be used for this commit.
@@ -386,7 +386,7 @@ def traverse_repo() -> None:
             logging.info(t.result())
 
 
-def run_analysis_singularity(analysis) -> str:
+def run_analysis_singularity(analysis: Analysis) -> str:
     """
     Given an analysis object, starts up a Singularity container and runs the command to perform analysis on a specific
     commit.
@@ -423,7 +423,8 @@ def run_analysis_singularity(analysis) -> str:
                   ' '.join(commands), commit_dir)
     output = Client.execute(command=commands, bind=binds, stream=True, options=['--writable-tmpfs', '--containall'])
 
-    output_format = config.get_output_format().replace('%COMMIT_ID%', commit_id).replace('%COMMIT_TIME%', commit_time)
+    output_format = config.get_output_format().replace('%COMMIT_ID%', commit_id).replace('%COMMIT_TIME%',
+                                                                                         commit_time.isoformat())
     output_file = config.get_output_dir() + output_format + '.txt'
 
     logging.debug('Opening output file %s', output_file)
