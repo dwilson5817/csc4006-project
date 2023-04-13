@@ -399,7 +399,7 @@ def run_analysis_singularity(analysis: Analysis) -> str:
 
     start_time = time.time()
 
-    commit_id, commit_time, analysis_command, analysis_image = analysis.get_details()
+    commit_id, commit_time, analysis_image, analysis_command = analysis.get_details()
 
     logging.info('Beginning analysis on %s', commit_id)
 
