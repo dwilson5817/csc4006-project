@@ -1,3 +1,5 @@
+![Pipeline status badge](https://gitlab.dylanwilson.dev/qub/csc4006-project/badges/main/pipeline.svg) ![Code coverage badge](https://gitlab.dylanwilson.dev/qub/csc4006-project/badges/main/coverage.svg)
+
 ## GitSlice
 
 This project is part of CSC4006 (Research and Development Project).
