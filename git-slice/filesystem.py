@@ -112,12 +112,13 @@ class FilesystemManager:
         if self.dry_run:
             return
 
-        dirs_to_create = (self.config.get_repo_dir(), self.config.get_mount_dir())
+        dirs_to_create = (self.config.get_output_dir(), self.config.get_repo_dir(), self.config.get_mount_dir())
 
         logging.debug('Creating directories: %s', ', '.join(dirs_to_create))
 
         for dir_to_create in dirs_to_create:
             logging.debug('Checking if %s exists...', dir_to_create)
+
             if not os.path.exists(dir_to_create):
                 logging.debug('%s doesn\'t exist, creating...', dir_to_create)
                 os.makedirs(dir_to_create)
