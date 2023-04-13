@@ -18,7 +18,7 @@ module add apps/singularity/3.10.0
 
 # Bring up Python virtual environment
 python3 -m venv venv
-source venv/bin/activate
+. venv/bin/activate
 
 # Ensure required packages are available in
 python3 -m pip install -r requirements.txt

@@ -217,8 +217,11 @@ def get_analysis_list(repo, config_dict):
                           commit.hexsha, last_commit_time.isoformat(), commit.committed_datetime.isoformat())
             continue
 
-        files_changed, additions, deletions = [int(num) for num in
-                                               re.findall(r'(\d+)', repo.git.diff(commit, shortstat=True))]
+        diff = repo.git.diff(f'{commit.hexsha}^@', shortstat=True)
+
+        logging.debug("git-diff gave %s", diff)
+
+        files_changed, additions, deletions = [int(num) for num in re.findall(r'(\d+)', diff)]
 
         logging.debug("Commit %s changed %i files, with %i additions and %i deletions", commit.hexsha, files_changed,
                       additions, deletions)
@@ -239,7 +242,7 @@ def get_analysis_list(repo, config_dict):
             continue
 
         if file_types_list:
-            changed_files = repo.git.diff(commit, name_only=True).splitlines(keepends=False)
+            changed_files = repo.git.diff(f'{commit.hexsha}^@', name_only=True).splitlines(keepends=False)
 
             if not file_type_changed(changed_files, file_types_list):
                 logging.debug('Commit %s did not change any files with types: %s', commit.hexsha,
