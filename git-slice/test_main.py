@@ -7,7 +7,7 @@ from config import Config
 from main import val_in_range, file_type_changed, parse_delta, Analysis, get_rev_list_params
 from test_config import config_data
 
-analysis = Analysis('commit ID', 'commit time', 'analysis command', 'analysis image')
+analysis = Analysis('commit ID', 'commit time', 'analysis image', 'analysis command')
 
 
 class TestAnalysis(unittest.TestCase):

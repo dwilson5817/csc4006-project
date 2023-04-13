@@ -39,11 +39,11 @@ class Analysis:
     and perform analysis on a commit.
     """
 
-    def __init__(self, commit_id, commit_time, analysis_command, analysis_image):
+    def __init__(self, commit_id, commit_time, analysis_image, analysis_command):
         self._commit_id = commit_id
         self._commit_time = commit_time
-        self._analysis_command = analysis_command
         self._analysis_image = analysis_image
+        self._analysis_command = analysis_command
 
     def get_analysis_command(self) -> str:
         """
