@@ -10,7 +10,7 @@
 # ====
 
 # Required.  Output logs from each run of the program will be stored in this directory.
-Output Directory: /tmp/users/40234266/csc4006-project/
+Output Directory: /users/40234266/csc4006-project/output/cov/flask/
 
 # Required.  Files will be output to the Output Directory in the format below, with .txt appended (including .txt here
 # will cause the output file to end in .txt.txt).  Available placeholders: %COMMIT_ID% and %COMMIT_TIME%
@@ -24,7 +24,7 @@ Output Format: '%COMMIT_TIME%_%COMMIT_ID%'
 
 # Required.  Directory used for files created during execution.  This directory isn't used for any output and anything
 # created will be deleted before the program exits.
-Temp Directory: /users/40234266/csc4006-project/output/cov/flask/
+Temp Directory: /tmp/users/40234266/csc4006-project/
 
 # Required.  When enabled, the container will first rsync the files to the temporary directory before analysis so the
 # analysis program can create and modify files during its execution.  These are deleted at the end.  This injects an

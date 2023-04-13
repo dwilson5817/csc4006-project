@@ -10,7 +10,7 @@
 # ====
 
 # Required.  Output logs from each run of the program will be stored in this directory.
-Output Directory: /tmp/users/40234266/csc4006-project/
+Output Directory: /users/40234266/csc4006-project/output/sast/numpy/
 
 # Required.  Files will be output to the Output Directory in the format below, with .txt appended (including .txt here
 # will cause the output file to end in .txt.txt).  Available placeholders: %COMMIT_ID% and %COMMIT_TIME%
@@ -24,7 +24,7 @@ Output Format: '%COMMIT_TIME%_%COMMIT_ID%'
 
 # Required.  Directory used for files created during execution.  This directory isn't used for any output and anything
 # created will be deleted before the program exits.
-Temp Directory: /users/40234266/csc4006-project/output/sast/numpy/
+Temp Directory: /tmp/users/40234266/csc4006-project/
 
 # Required.  When enabled, the container will first rsync the files to the temporary directory before analysis so the
 # analysis program can create and modify files during its execution.  These are deleted at the end.  This injects an
@@ -116,12 +116,12 @@ Additional Filters:
   # !! IMPORTANT: this is applied after all other additional filters, so consider this to be the upper limit on the
   # amount of commits which will be analysed.  If you wish to set a limit on the amount of commits to be considered, you
   # can add max-count to the Git Rev List Args stanza.
-  Limit: 15000
+  Limit: 20
 
   # Total amount of commits to skip before next analysis, i.e. 2 will select 1, then skip 2 commits, then select 1.
   # !! IMPORTANT: this is applied after all other additional filters, so consider this to be the amount of commits which
   # otherwise would be included, to skip.
-  Skip: 250
+  Skip: 0
 
 #  Changes:
 

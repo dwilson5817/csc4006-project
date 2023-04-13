@@ -119,7 +119,7 @@ class FilesystemManager:
         for dir_to_create in dirs_to_create:
             logging.debug('Checking if %s exists...', dir_to_create)
             if not os.path.exists(dir_to_create):
-                logging.debug('%s doesn\t exist, creating...', dir_to_create)
+                logging.debug('%s doesn\'t exist, creating...', dir_to_create)
                 os.makedirs(dir_to_create)
 
     def _nuke_dirs(self):
