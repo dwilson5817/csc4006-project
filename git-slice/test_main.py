@@ -4,7 +4,7 @@ from unittest import mock
 from unittest.mock import mock_open
 
 from config import Config
-from main import val_in_range, file_type_changed, parse_delta, Analysis, get_rev_list_params
+from main import val_in_range, file_type_changed, parse_delta, Analysis, get_rev_list_params, parse_diff_shortstat
 from test_config import config_data
 
 analysis = Analysis('commit ID', 'commit time', 'analysis image', 'analysis command')
@@ -70,6 +70,12 @@ class TestMain(unittest.TestCase):
         self.assertFalse(file_type_changed(['py.java.php'], ['py', 'java']))
         self.assertFalse(file_type_changed(['test.py'], ['java', 'php']))
         self.assertFalse(file_type_changed(['py.log'], ['py']))
+
+    def test_parse_diff_shortstat(self):
+        self.assertEqual((2, 4, 4), parse_diff_shortstat(' 2 files changed, 4 insertions(+), 4 deletions(-)'))
+        self.assertEqual((6, 299, 0), parse_diff_shortstat(' 6 files changed, 299 insertions(+)'))
+        self.assertEqual((1, 0, 3), parse_diff_shortstat(' 1 file changed, 3 deletions(-)'))
+        self.assertEqual((0, 0, 0), parse_diff_shortstat(''))
 
     def test_parse_timedelta(self):
         # Days

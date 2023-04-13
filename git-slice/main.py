@@ -144,6 +144,24 @@ def get_analysis_details(commit, analysis_config):
     return analysis_config['Default']['Image'], analysis_config['Default']['Command']
 
 
+def parse_number_from_string(str_to_parse: str):
+    """
+    Extracts all digits in a string an combines them to form a number.
+
+    For example, "100 insertions(+)" will produce return 100 (as an int).
+
+    :param str_to_parse: The string to extract the number from
+    :return: Integer representation of the number in the string
+    """
+
+    digits = re.search(r'\d+', str_to_parse)
+
+    if digits is None:
+        return None
+
+    return int(digits.group())
+
+
 def val_in_range(val, ranges_str) -> bool:
     """
     Given a value and a ranges string (e.g. "> 100, 150-175, 200 <") this function returns true or false indicating if
@@ -161,14 +179,41 @@ def val_in_range(val, ranges_str) -> bool:
                 return True
 
         if '>' in range_str:
-            if val > int(re.search(r'\d+', range_str).group()):
+            if val > parse_number_from_string(range_str):
                 return True
 
         if '<' in range_str:
-            if val < int(re.search(r'\d+', range_str).group()):
+            if val < parse_number_from_string(range_str):
                 return True
 
     return False
+
+
+def parse_diff_shortstat(diff_output: str):
+    """
+    Parses output from git-diff with shortstat option.
+
+    Given a string such as "2 files changed, 4 insertions(+), 4 deletions(-)", returns the files changed, insertions
+    and deletions as integers.
+
+    :param diff_output: Output from git-diff
+    :return: Tuple of files changed, insertions and deletions
+    """
+
+    files_changed = additions = deletions = 0
+
+    for stat in diff_output.split(','):
+        if stat is not None:
+            stat_int = parse_number_from_string(stat)
+
+            if ' changed' in stat:
+                files_changed = stat_int
+            elif 'insertion' in stat:
+                additions = stat_int
+            elif 'deletion' in stat:
+                deletions = stat_int
+
+    return files_changed, additions, deletions
 
 
 def get_analysis_list(repo, config_dict):
@@ -221,10 +266,7 @@ def get_analysis_list(repo, config_dict):
 
         logging.debug("git-diff gave %s", diff)
 
-        if not diff:
-            files_changed = additions = deletions = 0
-        else:
-            files_changed, additions, deletions = [int(num) for num in re.findall(r'(\d+)', diff)]
+        files_changed, additions, deletions = parse_diff_shortstat(diff)
 
         logging.debug("Commit %s changed %i files, with %i additions and %i deletions", commit.hexsha, files_changed,
                       additions, deletions)
