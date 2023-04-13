@@ -3,4 +3,3 @@ PyYAML==6.0
 torcpy==0.1.1
 spython~=0.3.0
 coloredlogs~=15.0.1
-uuid~=1.30
