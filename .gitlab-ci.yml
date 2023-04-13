@@ -19,14 +19,17 @@ flake8:
   only:
     - merge_requests
 
-unittest:
+coverage:
   image: python:3.10
   stage: test
   script:
     - pip install -r test_requirements.txt
-    - python -m unittest discover -s git-slice/ -t git-slice/
+    - coverage run -m pytest git-slice/
+    - coverage report
+    - coverage xml
   rules:
     - when: always
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
 
 sast:
   stage: test
