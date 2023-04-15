@@ -79,32 +79,32 @@ class TestMain(unittest.TestCase):
 
     def test_parse_timedelta(self):
         # Days
-        assert parse_delta('3d') == timedelta(days=3)
-        assert parse_delta('-3d') == timedelta(days=-3)
-        assert parse_delta('-37D') == timedelta(days=-37)
+        self.assertEqual(timedelta(days=3), parse_delta('3d'))
+        self.assertEqual(timedelta(days=-3), parse_delta('-3d'))
+        self.assertEqual(timedelta(days=-37), parse_delta('-37D'))
 
         # Hours
-        assert parse_delta('18h') == timedelta(hours=18)
-        assert parse_delta('-5h') == timedelta(hours=-5)
-        assert parse_delta('11H') == timedelta(hours=11)
+        self.assertEqual(timedelta(hours=18), parse_delta('18h'))
+        self.assertEqual(timedelta(hours=-5), parse_delta('-5h'))
+        self.assertEqual(timedelta(hours=11), parse_delta('11H'))
 
         # Mins
-        assert parse_delta('129m') == timedelta(minutes=129)
-        assert parse_delta('-68m') == timedelta(minutes=-68)
-        assert parse_delta('12M') == timedelta(minutes=12)
+        self.assertEqual(timedelta(minutes=129), parse_delta('129m'))
+        self.assertEqual(timedelta(minutes=-68), parse_delta('-68m'))
+        self.assertEqual(timedelta(minutes=12), parse_delta('12M'))
 
         # Combined
-        assert parse_delta('3d5h') == timedelta(days=3, hours=5)
-        assert parse_delta('-3d-5h') == timedelta(days=-3, hours=-5)
-        assert parse_delta('13d4h19m') == timedelta(days=13, hours=4, minutes=19)
-        assert parse_delta('13d19m') == timedelta(days=13, minutes=19)
-        assert parse_delta('-13d-19m') == timedelta(days=-13, minutes=-19)
-        assert parse_delta('-13d19m') == timedelta(days=-13, minutes=19)
-        assert parse_delta('13d-19m') == timedelta(days=13, minutes=-19)
-        assert parse_delta('4h19m') == timedelta(hours=4, minutes=19)
-        assert parse_delta('-4h-19m') == timedelta(hours=-4, minutes=-19)
-        assert parse_delta('-4h19m') == timedelta(hours=-4, minutes=19)
-        assert parse_delta('4h-19m') == timedelta(hours=4, minutes=-19)
+        self.assertEqual(timedelta(days=3, hours=5), parse_delta('3d5h'))
+        self.assertEqual(timedelta(days=-3, hours=-5), parse_delta('-3d-5h'))
+        self.assertEqual(timedelta(days=13, hours=4, minutes=19), parse_delta('13d4h19m'))
+        self.assertEqual(timedelta(days=13, minutes=19), parse_delta('13d19m'))
+        self.assertEqual(timedelta(days=-13, minutes=-19), parse_delta('-13d-19m'))
+        self.assertEqual(timedelta(days=-13, minutes=19), parse_delta('-13d19m'))
+        self.assertEqual(timedelta(days=13, minutes=-19), parse_delta('13d-19m'))
+        self.assertEqual(timedelta(hours=4, minutes=19), parse_delta('4h19m'))
+        self.assertEqual(timedelta(hours=-4, minutes=-19), parse_delta('-4h-19m'))
+        self.assertEqual(timedelta(hours=-4, minutes=19), parse_delta('-4h19m'))
+        self.assertEqual(timedelta(hours=4, minutes=-19), parse_delta('4h-19m'))
 
 
 if __name__ == '__main__':
