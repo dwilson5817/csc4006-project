@@ -44,6 +44,11 @@ build-cloc:
   variables:
     CONTAINER_NAME: cloc
 
+build-maven:
+  extends: .docker-build
+  variables:
+    CONTAINER_NAME: maven
+
 .docker-build:
   image: docker:latest
   stage: build
