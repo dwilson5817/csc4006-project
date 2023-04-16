@@ -240,12 +240,12 @@ def get_analysis_list(repo, config_dict):
 
     target_rev, rev_list_args = get_rev_list_params(config_dict=config_dict)
 
-    min_commit_time_delta = config_dict.get_additional_filter(AdditionalFilters.MIN_DELTA)
+    # min_commit_time is the str representation, min_commit_time_delta is the datetime.delta representation.
+    min_commit_time = config_dict.get_additional_filter(AdditionalFilters.MIN_DELTA)
+    min_commit_time_delta = None
 
-    if min_commit_time_delta is not None:
-        print(min_commit_time_delta)
-
-        parse_delta(min_commit_time_delta)
+    if min_commit_time is not None:
+        min_commit_time_delta = parse_delta(min_commit_time)
 
     last_commit_time = None
 
